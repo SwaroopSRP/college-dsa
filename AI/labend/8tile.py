@@ -1,25 +1,25 @@
 from collections import deque
 
-start = [1,2,3,4,0,5,6,7,8]
-goal  = [1,2,3,4,5,6,7,8,0]
+goal = [1,2,3,4,5,6,7,8,0]
 
-def get_neighbors(s):
+def neighbors(s):
     res = []
     i = s.index(0)
 
-    # possible moves: up, down, left, right
-    moves = [i-3, i+3, i-1, i+1]
+    moves = {
+        "up": i-3,
+        "down": i+3,
+        "left": i-1,
+        "right": i+1
+    }
 
-    for j in moves:
+    for m, j in moves.items():
         if 0 <= j < 9:
-            # avoid left-right crossing
-            if i%3 == 0 and j == i-1: continue
-            if i%3 == 2 and j == i+1: continue
-
-            new = s[:]
-            new[i], new[j] = new[j], new[i]
-            res.append(new)
-
+            if (m=="left" and i%3==0) or (m=="right" and i%3==2):
+                continue
+            ns = s[:]
+            ns[i], ns[j] = ns[j], ns[i]
+            res.append(ns)
     return res
 
 def bfs(start):
@@ -28,18 +28,19 @@ def bfs(start):
 
     while q:
         s = q.popleft()
-
+        
         if s == goal:
-            return "Goal Found"
-
+            return "Goal found"
+        
         visited.add(tuple(s))
-
-        for n in get_neighbors(s):
+        
+        for n in neighbors(s):
             if tuple(n) not in visited:
                 q.append(n)
 
-    return "No Solution"
+    return "No solution"
 
+start = [1,2,3,4,0,5,6,7,8]
 print(bfs(start))
 
 """
