@@ -1,5 +1,21 @@
 from sklearn.tree import DecisionTreeClassifier
 
+import math
+
+def entropy(data):
+    total = len(data)
+    count = {}
+    
+    for label in data:
+        count[label] = count.get(label, 0) + 1
+    
+    ent = 0
+    for c in count.values():
+        p = c / total
+        ent -= p * math.log2(p)
+    
+    return ent
+
 # Features: [has_link, has_offer_words, unknown_sender]
 X = [
     [1, 1, 1],
